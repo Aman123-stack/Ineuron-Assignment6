@@ -1,86 +1,133 @@
+q1>def reconstructPermutation(s):
+    perm = []
+    n = len(s)
+    low, high = 0, n
 
+    for ch in s:
+        if ch == 'I':
+            perm.append(low)
+            low += 1
+        elif ch == 'D':
+            perm.append(high)
+            high -= 1
 
+    # Append the remaining element
+    perm.append(low)
 
+    return perm
+q2>def searchMatrix(matrix, target):
+    m, n = len(matrix), len(matrix[0])
+    left, right = 0, m * n - 1
 
+    while left <= right:
+        mid = (left + right) // 2
+        row = mid // n
+        col = mid % n
+        mid_val = matrix[row][col]
 
+        if mid_val == target:
+            return True
+        elif mid_val < target:
+            left = mid + 1
+        else:
+            right = mid - 1
 
-
-
-
-
-Q3>class Solution:
-    def searchInsert(self, nums: List[int], target: int) -> int:
-        i=0
-        j=len(nums)-1
-        while(i<j):
-            mid=i+(j-i)//2
-            if(nums[mid]==target):
-                return mid
-            elif nums[mid]>target:
-                r=mid-1
-            else:
-                l=mid+1
-        return l
-
-
-
-Q4>class Solution:
-    def plusOne(self, digits: List[int]) -> List[int]:
-        digits=digits[::-1]
-        one,i=1,0
-        while one:
-            if i<len(digits):
-                if digits[i]==9:
-                    digits[i]=0
-                else:
-                    digits[i]+=1
-                    one=0
-            else:
-                digits.append(1)
-                one=0
-            i+=1
-        return digits[::-1]
-
-
-
-
-
-
-
-Q5>class Solution:
-    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
-        num1copy=nums1[:m]
-        p1=0
-        p2=0
-        p=0
-        while(p<m+n):
-            if(p2>=n or (p1<m and num1copy[p1]<nums2[p2])):
-                nums1[p]=num1copy[p1]
-                p1+=1
-            else:
-                nums1[p]=nums2[p2]
-                p2+=1
-            p+=1
-
-
-Q6>class Solution:
-    def containsDuplicate(self, nums: List[int]) -> bool:
-        A=set()
-        for n in nums:
-            if n in A:
-                return True
-            A.add(n)
+    return False
+q3>def validMountainArray(arr):
+    if len(arr) < 3:
         return False
 
+    n = len(arr)
+    left, right = 0, n - 1
 
-Q7> class Solution:
-    def moveZeroes(self, nums: List[int]) -> None:
-        """
-        Do not return anything, modify nums in-place instead.
-        """
-        i=0
-        for j in range(len(nums)):
-            if(nums[j]!=0):
-                nums[i],nums[j]=nums[j],nums[i]
-                i+=1
-        return nums
+    while left < n - 1 and arr[left] < arr[left + 1]:
+        left += 1
+
+    while right > 0 and arr[right] < arr[right - 1]:
+        right -= 1
+
+    if left == right or left == 0 or right == n - 1:
+        return False
+
+    return True
+q4>def findMaxLength(nums):
+    max_len = 0
+    count = 0
+    count_map = {0: -1}
+
+    for i in range(len(nums)):
+        count += 1 if nums[i] == 0 else -1
+
+        if count == 0:
+            max_len = i + 1
+        elif count in count_map:
+            length = i - count_map[count]
+            if length > max_len:
+                max_len = length
+        else:
+            count_map[count] = i
+
+    return max_len
+q5>def minProductSum(nums1, nums2):
+    nums1.sort()
+    nums2.sort()
+    n = len(nums1)
+    min_product_sum = 0
+
+    for i in range(n):
+        min_product_sum += nums1[i] * nums2[n - i - 1]
+
+    return min_product_sum
+q6>from collections import defaultdict
+
+def findOriginalArray(changed):
+    count = defaultdict(int)
+
+    for num in changed:
+        count[num] += 1
+        if num % 2 == 0 and count[num // 2] > 0:
+            count[num // 2] -= 1
+        elif num % 2 != 0:
+            return []
+
+    original = []
+
+    for num in changed:
+        while count[num] > 0:
+            original.append(num // 2)
+            count[num] -= 1
+
+    return original
+q7>from collections import defaultdict
+
+def findOriginalArray(changed):
+    count = defaultdict(int)
+
+    for num in changed:
+        count[num] += 1
+        if num % 2 == 0 and count[num // 2] > 0:
+            count[num // 2] -= 1
+        elif num % 2 != 0:
+            return []
+
+    original = []
+
+    for num in changed:
+        while count[num] > 0:
+            original.append(num // 2)
+            count[num] -= 1
+
+    return original
+q8>def multiply(mat1, mat2):
+    m = len(mat1)
+    k = len(mat1[0])
+    n = len(mat2[0])
+
+    result = [[0] * n for _ in range(m)]
+
+    for i in range(m):
+        for j in range(n):
+            for p in range(k):
+                result[i][j] += mat1[i][p] * mat2[p][j]
+
+    return result
